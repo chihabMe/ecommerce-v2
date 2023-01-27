@@ -10,7 +10,6 @@ import {
 import * as authServices from "./auth.services";
 import { compareSync } from "bcrypt";
 import { prisma } from "../../core/database";
-import { accessMaxAge, refreshMaxAge } from "../../core/constance";
 import jwt from "jsonwebtoken";
 interface RegisterResponseErrors {
   fieldErrors: {
