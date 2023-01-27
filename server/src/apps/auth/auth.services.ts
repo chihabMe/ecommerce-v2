@@ -76,7 +76,7 @@ export function generateAccessToken({ user }: { user: User }) {
   });
 }
 export async function deleteRefreshToken({ token }: { token: string }) {
-  prisma.refreshToken.deleteMany({
+  return await prisma.refreshToken.deleteMany({
     where: {
       body: token,
     },

@@ -125,12 +125,12 @@ export const refreshTokenHandler = async (
   //if the refresh token is invalid or its not in the database return 403 error
   if (!refreshToken) return res.status(403).json("invalid refresh token");
   //@ts-ignore
-  const id: string = jwt.decode(token);
+  const id: string = jwt.decode(token).id;
   //get the user by the extracted  id
   const user = await authServices.getUserById({ id });
   if (!user) return res.sendStatus(403);
   //delete the current refresh token
-  authServices.deleteRefreshToken({ token });
+  await authServices.deleteRefreshToken({ token });
   //generate new refresh and access tokens
   const newAccessToken = authServices.generateAccessToken({ user });
   const newRefreshToken = await authServices.generateRefreshToken({ user });
