@@ -2,11 +2,16 @@ import { Request, Response } from "express";
 import cookie from "cookie";
 import { hash } from "bcrypt";
 import { PrismaClient } from "@prisma/client";
-import { loginSchema, registrationSchemas } from "./auth.schemas";
+import {
+  loginSchema,
+  refreshTokenSchema,
+  registrationSchemas,
+} from "./auth.schemas";
 import * as authServices from "./auth.services";
 import { compareSync } from "bcrypt";
 import { prisma } from "../../core/database";
-import { accessMaxAge } from "../../core/constance";
+import { accessMaxAge, refreshMaxAge } from "../../core/constance";
+import jwt from "jsonwebtoken";
 interface RegisterResponseErrors {
   fieldErrors: {
     name: string[];
@@ -18,6 +23,7 @@ export const loginHandler = async (
   res: Response
 ) => {
   const valid = loginSchema.safeParse(req.body);
+
   if (!valid.success)
     return res
       .status(403)
@@ -37,30 +43,11 @@ export const loginHandler = async (
         status: "error",
         errors: "please check your email and password",
       });
-    console.log("--------");
-    // const token = jwt.encode({
-    //   secret:process.env.SECRET_KEY??"",
-    //   maxAge:accessMaxAge,
-    //   token:{
-    //     name:user.name,
-    //     id:user.id
-    //   }
-    // })
-    // console.log(token)
-    console.log("--------");
-    res.setHeader("Set-Cookie", [
-      cookie.serialize("access", "accessToken", {
-        secure: false,
-        maxAge: 60 * 60 * 24,
-        httpOnly: true,
-      }),
-      cookie.serialize("refresh", "refreshToken", {
-        secure: false,
-        httpOnly: true,
-        maxAge: 60 * 60 * 24 * 30,
-      }),
-    ]);
-    return res.status(200).json({ status: "success" });
+    const accessToken = authServices.generateAccessToken({ user });
+    const refreshToken = await authServices.generateRefreshToken({ user });
+    return res
+      .status(200)
+      .json({ status: "success", accessToken, refreshToken });
   } catch (err) {
     return res.status(403).json({
       status: "error",
@@ -108,7 +95,6 @@ export const registerHandler = async (
   return hash(password, 14, async (err, hash) => {
     if (err) return res.sendStatus(403);
     try {
-      console.log("hash=>", hash);
       const user = await prisma.user.create({
         data: {
           email,
@@ -120,5 +106,38 @@ export const registerHandler = async (
     } catch (err) {
       return res.sendStatus(403);
     }
+  });
+};
+
+export const refreshTokenHandler = async (
+  req: Request<{}, {}, { token: string }>,
+  res: Response
+) => {
+  const valid = refreshTokenSchema.safeParse(req.body);
+  if (!valid.success)
+    return res.status(403).json(valid.error.formErrors.fieldErrors);
+  const { token } = req.body;
+
+  //verify if this refresh token is generate by the server and if its saved in the database
+  const refreshToken = await authServices.verifyRefreshToken({
+    token,
+  });
+  //if the refresh token is invalid or its not in the database return 403 error
+  if (!refreshToken) return res.status(403).json("invalid refresh token");
+  //@ts-ignore
+  const id: string = jwt.decode(token);
+  //get the user by the extracted  id
+  const user = await authServices.getUserById({ id });
+  if (!user) return res.sendStatus(403);
+  //delete the current refresh token
+  authServices.deleteRefreshToken({ token });
+  //generate new refresh and access tokens
+  const newAccessToken = authServices.generateAccessToken({ user });
+  const newRefreshToken = await authServices.generateRefreshToken({ user });
+  //return the refresh / access tokens
+  return res.status(200).json({
+    status: "success",
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken,
   });
 };

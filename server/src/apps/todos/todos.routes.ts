@@ -8,7 +8,7 @@ import {
 import { authMiddleware } from "../../middlewares/protected.middleware";
 
 export const todosRouter = Router();
-// todosRouter.use(authMiddleware);
+todosRouter.use(authMiddleware);
 todosRouter.get("/", getAllTodosHandler);
 todosRouter.post("/", addTodoHandler);
 todosRouter.put("/:id", updateTodoHandler);

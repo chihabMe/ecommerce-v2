@@ -10,6 +10,7 @@ const registerRoutes = (app: Router) => {
   app.use("/api/v1/auth", authRouter);
   app.use("/api/v1/todos", todosRouter);
 };
+
 const main = () => {
   const app = express();
   //middleware
