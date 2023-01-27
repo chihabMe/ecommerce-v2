@@ -1,0 +1,26 @@
+POST http://localhost:3000/api/v1/auth/token/obtain
+content-type: application/json
+
+{
+    "email":"chihabs@email.com",
+    "password":"pass1234"
+}
+###
+GET http://localhost:3000/api/v1/todos
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUyYWFjOTQ1LTc1NTMtNDFmMi05ZjQ5LWY3ZmNkYTcwMWJjNiIsIm5hbWUiOiJjaGloYWJzIiwiaWF0IjoxNjc0ODQ5MDgyLCJleHAiOjE2NzQ4NDkxNDJ9.suxLYH94BQC0XRJ4IslgHQkTMZIwPrW7pyQiWeA8MHs
+
+###
+POST http://localhost:3000/api/v1/auth/token/refresh
+content-type: application/json
+
+{
+    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUyYWFjOTQ1LTc1NTMtNDFmMi05ZjQ5LWY3ZmNkYTcwMWJjNiIsIm5hbWUiOiJjaGloYWJzIiwiaWF0IjoxNjc0ODU1NjI1LCJleHAiOjE2NzQ4NTU2ODV9.QPvtjhuxVUfwWeh7oryb4uJOrL1uzdmXF517p_GM_7E"
+}
+
+###
+POST http://localhost:3000/api/v1/auth/token/verify
+content-type: application/json
+
+{
+    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUyYWFjOTQ1LTc1NTMtNDFmMi05ZjQ5LWY3ZmNkYTcwMWJjNiIsIm5hbWUiOiJjaGloYWJzIiwiaWF0IjoxNjc0ODU1NzQyLCJleHAiOjE2NzQ4NTU4MDJ9.6bqS49djAzcBJuwaoukVuEgGVmh3H0ZHqX4o84yGsmI"
+}

@@ -40,3 +40,62 @@ model RefreshToken {
   user      User     @relation(fields: [userId], references: [id])
   userId    String
 }
+
+model Book {
+  id          String @id @unique @default(uuid())
+  title       String
+  descriptino String
+  published   Int
+  ISBN        String
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  author      Author    @relation(fields: [authorId], references: [id])
+  authorId    String
+  lang        Language  @relation(fields: [languageId], references: [id])
+  languageId  String
+  publisher   Publisher @relation(fields: [publisherId], references: [id])
+  publisherId String
+  category    Category  @relation(fields: [categoryId], references: [id])
+  categoryId  String
+}
+
+model Category {
+  id        String   @id @unique @default(uuid())
+  title     String   @unique
+  Books     Book[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Publisher {
+  id        String   @id @unique @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Books     Book[]
+}
+
+model Language {
+  id        String   @id @unique @default(uuid())
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Books     Book[]
+}
+
+model BookReview {
+  id        String   @id @unique @default(uuid())
+  rate      Int      @default(1)
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Author {
+  id        String   @id @unique @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Books     Book[]
+}
