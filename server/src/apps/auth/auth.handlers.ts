@@ -2,12 +2,8 @@ import { Request, Response } from "express";
 import cookie from "cookie";
 import { hash } from "bcrypt";
 import { PrismaClient } from "@prisma/client";
-import {
-  loginSchema,
-  refreshTokenSchema,
-  registrationSchemas,
-} from "./auth.schemas";
-import * as authServices from "./auth.services";
+import { loginSchema, registrationSchemas, tokenSchema } from "./auth.schemas";
+import * as authServices from "./services";
 import { compareSync } from "bcrypt";
 import { prisma } from "../../core/database";
 import jwt from "jsonwebtoken";
@@ -112,7 +108,7 @@ export const refreshTokenHandler = async (
   req: Request<{}, {}, { token: string }>,
   res: Response
 ) => {
-  const valid = refreshTokenSchema.safeParse(req.body);
+  const valid = tokenSchema.safeParse(req.body);
   if (!valid.success)
     return res.status(403).json(valid.error.formErrors.fieldErrors);
   const { token } = req.body;
@@ -139,4 +135,16 @@ export const refreshTokenHandler = async (
     accessToken: newAccessToken,
     refreshToken: newRefreshToken,
   });
+};
+
+export const verifyAccessTokenHandler = async (
+  req: Request<{}, {}, { token: string }>,
+  res: Response
+) => {
+  const valid = tokenSchema.safeParse(req.body);
+  if (!valid.success) return valid.error.formErrors.fieldErrors;
+  const { token } = req.body;
+  const isValid = authServices.verifyAccessToken({ token });
+  if (!isValid) return res.status(403).json("invalid token");
+  return res.sendStatus(200);
 };

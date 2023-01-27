@@ -2,6 +2,13 @@ import { User } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { accessMaxAge, refreshMaxAge } from "../../../core/constance";
 import { prisma } from "../../../core/database";
+export function verifyAccessToken({ token }: { token: string }): boolean {
+  let valid = false;
+  jwt.verify(token, process.env.ACCESS_SECRET ?? "", async (err, data) => {
+    if (!err) valid = true;
+  });
+  return valid;
+}
 export async function verifyRefreshToken({
   token,
 }: {
@@ -12,15 +19,18 @@ export async function verifyRefreshToken({
     token,
     process.env.REFRESH_SECRET ?? "",
     async (err, data) => {
-      //@ts-ignore
-      const id: string = data.id;
-      const refreshToken = await prisma.refreshToken.findFirst({
-        where: {
-          userId: id,
-          body: token,
-        },
-      });
-      valid = refreshToken != null;
+      if (!err) {
+        console.log(data);
+        //@ts-ignore
+        const id: string = data.id;
+        const refreshToken = await prisma.refreshToken.findFirst({
+          where: {
+            userId: id,
+            body: token,
+          },
+        });
+        valid = refreshToken != null;
+      }
     }
   );
   return valid;
@@ -50,7 +60,7 @@ export async function generateRefreshToken({ user }: { user: User }) {
   const refreshToken = jwt.sign(userData, process.env.REFRESH_SECRET ?? "", {
     expiresIn: refreshMaxAge,
   });
-  const token = await prisma.refreshToken.create({
+  await prisma.refreshToken.create({
     data: {
       body: refreshToken,
       userId: user.id,
