@@ -1,0 +1,24 @@
+
+# Dependency directories
+server/node_modules/
+web/node_modules/
+
+
+# Optional eslint cache
+server/.eslintcache
+web/.eslintcache
+
+# dotenv environment variable files
+server/.env
+server/.env.local
+web/.env
+web/.env.local
+
+# Next.js build output
+web/.next
+web/out
+
+
+# Stores VSCode versions used for testing VSCode extensions
+server/.vscode-test
+web/.vscode-test
