@@ -13,7 +13,7 @@ const Input = ({
 }) => {
   const [field, meta, actions] = useField({ type, name });
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex px-1 flex-col gap-2">
       <MUInput
         size="lg"
         variant="standard"
