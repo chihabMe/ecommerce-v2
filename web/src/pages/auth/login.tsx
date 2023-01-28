@@ -11,10 +11,11 @@ import { Form, Formik, FormikHelpers } from "formik";
 import Input from "@/components/ui/Input";
 import { loginSchema } from "@/helpers/schemas/auth.schemas";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import useFetch from "use-http";
 import Link from "next/link";
 import { API, loginEndpoint } from "@/config/constances";
 import { Spinner } from "@/components/ui/Spinner";
+import useFetch from "@/hooks/useFetch";
+import { useRouter } from "next/router";
 const initialValues = {
   email: "",
   password: "",
@@ -26,15 +27,22 @@ interface Response {
   accessToken?: string;
 }
 const LoginPage = () => {
-  const { post, error, loading } = useFetch(API, {
-    cache: "no-cache",
-  });
+  //   const { post, error, loading } = useFetch(API, {
+
+  // cache: "no-cache",
+  //   });
+  const router = useRouter();
+  const { loading, success, error, post } = useFetch();
   const [data, setData] = useState<Response | null>(null);
+
   const formSubmitHandler = async (
     values: typeof initialValues,
     actions: FormikHelpers<typeof initialValues>
   ) => {
-    const resData = await post(loginEndpoint, values, {});
+    const resData = await post({
+      url: API + "/" + loginEndpoint,
+      body: JSON.stringify(values),
+    });
     if (resData.status == "error")
       actions.setErrors({
         email: "",
@@ -44,9 +52,12 @@ const LoginPage = () => {
 
     setData(resData);
   };
+
   useEffect(() => {
-    if (!loading && !error) console.log(data);
-  });
+    if (!loading && success) {
+      router.push("/");
+    }
+  }, [loading, success]);
   return (
     <main>
       <div className="w-full mx-auto max-w-sm pt-10 mt-10">
