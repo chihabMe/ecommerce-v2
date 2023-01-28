@@ -1,7 +1,7 @@
 
 # Dependency directories
-server/node_modules/
-web/node_modules/
+server/node_modules
+web/node_modules
 
 
 # Optional eslint cache
@@ -22,3 +22,4 @@ web/out
 # Stores VSCode versions used for testing VSCode extensions
 server/.vscode-test
 web/.vscode-test
+node_modules
