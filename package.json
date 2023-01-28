@@ -1,0 +1,6 @@
+{
+	"dependencies": {
+		"react-spinners": "^0.13.8",
+		"use-http": "^1.0.27"
+	}
+}
