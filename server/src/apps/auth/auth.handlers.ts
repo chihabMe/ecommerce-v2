@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import cookie from "cookie";
 import { hash } from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import { loginSchema, registrationSchemas, tokenSchema } from "./auth.schemas";
@@ -7,6 +6,7 @@ import * as authServices from "./services";
 import { compareSync } from "bcrypt";
 import { prisma } from "../../core/database";
 import jwt from "jsonwebtoken";
+import { accessMaxAge, refreshMaxAge } from "../../core/constance";
 interface RegisterResponseErrors {
   fieldErrors: {
     name: string[];
@@ -40,9 +40,16 @@ export const loginHandler = async (
       });
     const accessToken = authServices.generateAccessToken({ user });
     const refreshToken = await authServices.generateRefreshToken({ user });
-    return res
-      .status(200)
-      .json({ status: "success", accessToken, refreshToken });
+
+    authServices.setTokens({
+      res,
+      access: accessToken,
+      refresh: refreshToken,
+    });
+    return res.status(200).json({
+      status: "success",
+      // , accessToken, refreshToken
+    });
   } catch (err) {
     return res.status(403).json({
       status: "error",
@@ -130,10 +137,15 @@ export const refreshTokenHandler = async (
   const newAccessToken = authServices.generateAccessToken({ user });
   const newRefreshToken = await authServices.generateRefreshToken({ user });
   //return the refresh / access tokens
+  authServices.setTokens({
+    res,
+    access: newAccessToken,
+    refresh: newRefreshToken,
+  });
   return res.status(200).json({
     status: "success",
-    accessToken: newAccessToken,
-    refreshToken: newRefreshToken,
+    // accessToken: newAccessToken,
+    // refreshToken: newRefreshToken,
   });
 };
 

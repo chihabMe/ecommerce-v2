@@ -1,7 +1,9 @@
 import { User } from "@prisma/client";
+import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { accessMaxAge, refreshMaxAge } from "../../../core/constance";
 import { prisma } from "../../../core/database";
+import { todosRouter } from "../../todos/todos.routes";
 export function verifyAccessToken({ token }: { token: string }): boolean {
   let valid = false;
   jwt.verify(token, process.env.ACCESS_SECRET ?? "", async (err, data) => {
@@ -67,4 +69,32 @@ export async function generateRefreshToken({ user }: { user: User }) {
     },
   });
   return refreshToken;
+}
+
+export function setTokens({
+  res,
+  refresh,
+  access,
+}: {
+  res: Response;
+  refresh: string;
+  access: string;
+}) {
+  const isProduction: boolean = process.env.MODE === "PRODUCTION";
+  res.cookie("authorization", access, {
+    secure: isProduction,
+    domain: process.env.DOMAIN,
+    httpOnly: true,
+    sameSite: isProduction ? "strict" : "lax",
+    path: "/",
+    maxAge: accessMaxAge * 1000,
+  });
+  res.cookie("refresh", refresh, {
+    secure: isProduction,
+    domain: process.env.DOMAIN,
+    httpOnly: true,
+    sameSite: isProduction ? "strict" : "lax",
+    path: "/",
+    maxAge: refreshMaxAge * 1000,
+  });
 }

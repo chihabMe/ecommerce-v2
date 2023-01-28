@@ -18,15 +18,17 @@ const useFetch = () => {
     setLoading(true);
     setError(false);
     setSuccess(false);
-    const config = {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body,
-    };
     try {
-      const response = await fetch(url, config);
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body,
+        mode: "cors",
+        credentials: "include",
+      });
       const data = await response.json();
       if (!response.ok) {
         setError(true);

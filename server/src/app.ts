@@ -7,6 +7,7 @@ import { authRouter } from "./apps/auth/auth.routes";
 import cors from "cors";
 import { todosRouter } from "./apps/todos/todos.routes";
 import { corsOptionsDelegate } from "./core/cors.headers";
+import { ALLOWED_ORIGINS } from "./core/constance";
 dotenv.config();
 const registerRoutes = (app: Router) => {
   app.use("/api/v1/auth", authRouter);
@@ -19,7 +20,12 @@ const main = () => {
   app.use(express.json());
   app.use(helmet());
   app.use(morgan("dev"));
-  app.use(cors(corsOptionsDelegate));
+  app.use(
+    cors({
+      credentials: true,
+      origin: ALLOWED_ORIGINS,
+    })
+  );
   //register apps
   registerRoutes(app);
   //

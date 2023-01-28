@@ -20,6 +20,7 @@ const Input = ({
         success={meta.touched && !meta.error}
         error={meta.touched && meta.error != undefined}
         label={label}
+        type={type}
         {...field}
       />
       {meta.error && meta.touched && (
