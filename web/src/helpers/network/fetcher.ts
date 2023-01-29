@@ -64,7 +64,17 @@ export const fetcher = async ({
   let refreshResponse;
   let data;
   let newTokens: { access: string; refresh: string };
-  let response = await fetch(url, config);
+  let response;
+  try {
+    response = await fetch(url, config);
+  } catch {
+    return {
+      refreshed: false,
+      refreshResponse: undefined,
+      status: 403,
+      data: undefined,
+    };
+  }
 
   if (response.status == 401 && tokens?.refresh) {
     refreshResponse = await refreshFetcher({
@@ -76,7 +86,12 @@ export const fetcher = async ({
     }
   }
 
-  if (response.ok) data = await response.json();
+  if (response.ok) {
+    try {
+      data = await response.json();
+    } catch {}
+  }
+
   return {
     refreshed: refreshResponse && refreshResponse.status == 200,
     refreshResponse,
