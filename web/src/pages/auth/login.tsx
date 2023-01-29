@@ -40,7 +40,7 @@ const LoginPage = () => {
     actions: FormikHelpers<typeof initialValues>
   ) => {
     const resData = await post({
-      url: API + "/" + loginEndpoint,
+      url: loginEndpoint,
       body: JSON.stringify(values),
     });
     if (resData.status == "error")

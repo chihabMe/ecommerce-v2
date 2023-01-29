@@ -1,7 +1,7 @@
-export const API = process.env.API ?? "http://localhost:3001/api/v1";
+export const API = process.env.API ?? "http://localhost:3001/api/v1/";
 
-export const loginEndpoint = "auth/token/obtain";
-export const refreshEndpoint = "auth/token/refresh";
-export const verifyEndpoint = "auth/token/verify";
+export const loginEndpoint = API + "auth/token/obtain";
+export const refreshEndpoint = API + "auth/token/refresh";
+export const verifyEndpoint = API + "auth/token/verify";
 
 export const registrationEndpoint = "auth/register";
