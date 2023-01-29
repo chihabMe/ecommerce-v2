@@ -33,13 +33,13 @@ export const refreshFetcher = async ({ refresh }: { refresh: string }) => {
 
   const response = await fetch(refreshEndpoint, config);
   let data;
-  if (response.ok) {
-    data = response.json();
-  }
+  try {
+    data = await response.json();
+  } catch {}
   return {
     status: response.status,
-    access: response.headers.get("authorization"),
-    refresh: response.headers.get("refresh"),
+    access: data?.access,
+    refresh: data?.refresh,
   };
 };
 export const fetcher = async ({
@@ -56,7 +56,7 @@ export const fetcher = async ({
     refresh?: string;
   };
 }) => {
-  const config = fetcherConfig({
+  let config = fetcherConfig({
     method,
     body,
     tokens,
@@ -80,9 +80,16 @@ export const fetcher = async ({
     refreshResponse = await refreshFetcher({
       refresh: tokens.refresh,
     });
-    if (refreshResponse.status == 200) {
-      if ("refreshed successfully i will try to fetch again")
+    if (refreshResponse.status == 200 && refreshResponse.access) {
+      {
+        config = fetcherConfig({
+          method: "POST",
+          tokens: {
+            access: refreshResponse.access,
+          },
+        });
         response = await fetch(url, config);
+      }
     }
   }
 
