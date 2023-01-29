@@ -3,11 +3,14 @@ import { AppProps } from "next/app";
 import React from "react";
 import "../styles/globals.css";
 import { ThemeProvider } from "@material-tailwind/react";
+import { AuthContextProvider } from "@/context/auth.context";
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <ThemeProvider>
-      <NavBar />
-      <Component {...pageProps} />;
+      <AuthContextProvider>
+        <NavBar />
+        <Component {...pageProps} />;
+      </AuthContextProvider>
     </ThemeProvider>
   );
 };

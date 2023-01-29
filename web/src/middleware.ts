@@ -8,7 +8,7 @@ export const middleware = async (req: NextRequest) => {
   let access = req.cookies.get("authorization")?.value;
   let refresh = req.cookies.get("refresh")?.value;
 
-  const { data, refreshed, refreshResponse, status } = await fetcher({
+  const { refreshResponse, status } = await fetcher({
     url: verifyEndpoint,
     method: "POST",
     tokens: {
@@ -23,9 +23,9 @@ export const middleware = async (req: NextRequest) => {
     refreshResponse?.access &&
     refreshResponse?.refresh
   ) {
-    req.cookies.set("authorization", refreshResponse.access);
+    req.cookies.set("authorization", "Bearer " + refreshResponse.access);
     req.cookies.set("refresh", refreshResponse.refresh);
-    response.cookies.set("Authorization", refreshResponse.access);
+    response.cookies.set("authorization", "Bearer " + refreshResponse.access);
     response.cookies.set("refresh", refreshResponse.refresh);
   }
 

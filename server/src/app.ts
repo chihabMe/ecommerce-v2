@@ -8,10 +8,13 @@ import cors from "cors";
 import { todosRouter } from "./apps/todos/todos.routes";
 import { corsOptionsDelegate } from "./core/cors.headers";
 import { ALLOWED_ORIGINS } from "./core/constance";
+import { accountsRouter } from "./apps/accounts/accounts.routes";
+import cookieParser from "cookie-parser";
 dotenv.config();
 const registerRoutes = (app: Router) => {
   app.use("/api/v1/auth", authRouter);
   app.use("/api/v1/todos", todosRouter);
+  app.use("/api/v1/accounts", accountsRouter);
 };
 
 const main = () => {
@@ -20,6 +23,7 @@ const main = () => {
   app.use(express.json());
   app.use(helmet());
   app.use(morgan("dev"));
+  app.use(cookieParser());
   app.use(
     cors({
       credentials: true,

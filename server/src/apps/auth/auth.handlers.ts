@@ -141,15 +141,15 @@ export const refreshTokenHandler = async (
   const newAccessToken = authServices.generateAccessToken({ user });
   const newRefreshToken = await authServices.generateRefreshToken({ user });
   //return the refresh / access tokens
-  authServices.setTokens({
-    res,
-    access: newAccessToken,
-    refresh: newRefreshToken,
-  });
+  // authServices.setTokens({
+  //   res,
+  //   access: newAccessToken,
+  //   refresh: newRefreshToken,
+  // });
   return res.status(200).json({
     status: "success",
-    // accessToken: newAccessToken,
-    // refreshToken: newRefreshToken,
+    access: newAccessToken,
+    refresh: newRefreshToken,
   });
 };
 
@@ -158,9 +158,8 @@ export const verifyAccessTokenHandler = async (
   res: Response
 ) => {
   // const valid = tokenSchema.safeParse(req.body);
-  const access = req.headers["authorization"];
+  const access = req.headers["authorization"]?.split(" ")[1];
   if (!access) return res.status(401).json("provide an access tokens");
-  console.log(access);
   const isValid = authServices.verifyAccessToken({ token: access });
   if (!isValid) return res.status(401).json("invalid access token");
 

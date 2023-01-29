@@ -63,7 +63,6 @@ export const fetcher = async ({
   });
   let refreshResponse;
   let data;
-  let newTokens: { access: string; refresh: string };
   let response;
   try {
     response = await fetch(url, config);
@@ -81,15 +80,13 @@ export const fetcher = async ({
       refresh: tokens.refresh,
     });
     if (refreshResponse.status == 200 && refreshResponse.access) {
-      {
-        config = fetcherConfig({
-          method: "POST",
-          tokens: {
-            access: refreshResponse.access,
-          },
-        });
-        response = await fetch(url, config);
-      }
+      config = fetcherConfig({
+        method: "POST",
+        tokens: {
+          access: refreshResponse.access,
+        },
+      });
+      response = await fetch(url, config);
     }
   }
 
@@ -100,7 +97,6 @@ export const fetcher = async ({
   }
 
   return {
-    refreshed: refreshResponse && refreshResponse.status == 200,
     refreshResponse,
     status: response.status,
     data: data,
