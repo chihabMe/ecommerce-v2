@@ -9,7 +9,12 @@ const profile = () => {
     <Spinner size={40} color="blue" />
   </div>;
 
-  return <div>{/* you are logged in {user?.email} {user?.name}{" "} */}</div>;
+  return (
+    <div>
+      {" "}
+      you are logged in {user?.email} {user?.name}
+    </div>
+  );
 };
 
 export default profile;

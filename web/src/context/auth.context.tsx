@@ -41,15 +41,16 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    setIsLoading(loading);
     if (!loading && success) {
+      setIsLoading(false);
       setUser(data);
-      if (!loading && !success) {
-        setIsAuthenticated(false);
-        setUser(null);
-      }
     }
-  }, [loading, setIsLoading, setUser]);
+    if (!loading && !success) {
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsLoading(false);
+    }
+  }, [loading, success, setIsLoading, setUser]);
   const logout = () => {
     post({
       url: "/api/auth/logout",

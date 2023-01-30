@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { fetcher as fetchWithRefresh } from "@/helpers/network/fetcher";
 
 const useFetch = () => {
   const [data, setData] = useState<any>(null);
@@ -19,18 +20,23 @@ const useFetch = () => {
     setError(false);
     setSuccess(false);
     try {
-      const response = await fetch(url, {
+      // const response = await fetch(url, {
+      //   method,
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Accept: "application/json",
+      //   },
+      //   body,
+      //   mode: "cors",
+      //   credentials: "include",
+      // });
+      const { ok, data } = await fetchWithRefresh({
         method,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        url,
         body,
-        mode: "cors",
-        credentials: "include",
       });
-      const data = await response.json();
-      if (!response.ok) {
+      // const data = await response.json();
+      if (!ok) {
         setError(true);
         setSuccess(false);
       } else setSuccess(true);

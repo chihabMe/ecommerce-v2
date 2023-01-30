@@ -21,11 +21,13 @@ export function fetcherConfig({
     },
     credentials: "include",
     mode: "cors",
+    body,
   };
 }
-export const refreshFetcher = async ({ refresh }: { refresh: string }) => {
+export const refreshFetcher = async ({ refresh }: { refresh?: string }) => {
   const config = fetcherConfig({
     method: "POST",
+
     tokens: {
       refresh,
     },
@@ -61,6 +63,8 @@ export const fetcher = async ({
     body,
     tokens,
   });
+  console.log("body", body);
+  console.log("config", config);
   let refreshResponse;
   let data;
   let response;
@@ -75,13 +79,14 @@ export const fetcher = async ({
     };
   }
 
-  if (response.status == 401 && tokens?.refresh) {
+  if (response.status == 401) {
     refreshResponse = await refreshFetcher({
-      refresh: tokens.refresh,
+      refresh: tokens?.refresh,
     });
     if (refreshResponse.status == 200 && refreshResponse.access) {
       config = fetcherConfig({
         method: "POST",
+        body,
         tokens: {
           access: refreshResponse.access,
         },
@@ -100,5 +105,6 @@ export const fetcher = async ({
     refreshResponse,
     status: response.status,
     data: data,
+    ok: response.ok,
   };
 };
