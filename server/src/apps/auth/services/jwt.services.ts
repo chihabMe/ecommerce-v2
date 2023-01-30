@@ -81,7 +81,7 @@ export function setTokens({
   access: string;
 }) {
   const isProduction: boolean = process.env.MODE === "PRODUCTION";
-  res.cookie("authorization", access, {
+  res.cookie("authorization", "Bearer " + access, {
     secure: isProduction,
     domain: process.env.DOMAIN,
     httpOnly: true,

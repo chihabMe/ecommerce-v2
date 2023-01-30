@@ -16,6 +16,7 @@ import { API, loginEndpoint } from "@/config/constances";
 import { Spinner } from "@/components/ui/Spinner";
 import useFetch from "@/hooks/useFetch";
 import { useRouter } from "next/router";
+import { useUser } from "@/context/auth.context";
 const initialValues = {
   email: "",
   password: "",
@@ -33,6 +34,7 @@ const LoginPage = () => {
   //   });
   const router = useRouter();
   const { loading, success, error, post } = useFetch();
+  const { loadUser } = useUser();
   const [data, setData] = useState<Response | null>(null);
 
   const formSubmitHandler = async (
@@ -55,6 +57,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (!loading && success) {
+      loadUser();
       router.push("/");
     }
   }, [loading, success]);

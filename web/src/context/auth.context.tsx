@@ -1,18 +1,28 @@
 import { currentUserEndpoint } from "@/config/constances";
 import useFetch from "@/hooks/useFetch";
 import User from "@/interfaces/user.interface";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface AuthContextInterface {
   isAuthenticated: boolean;
   isLoading: boolean;
   user: User | null;
+  logout: () => void;
+  loadUser: () => void;
 }
 
 const initialState: AuthContextInterface = {
   isAuthenticated: false,
   isLoading: true,
   user: null,
+  logout: () => {},
+  loadUser: () => {},
 };
 
 export const AuthContext = createContext(initialState);
@@ -23,24 +33,40 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   );
   const [isLoading, setIsLoading] = useState(initialState.isLoading);
   const [user, setUser] = useState(initialState.user);
-  const { get, data, success, loading } = useFetch();
+  const { get, post, data, success, loading } = useFetch();
+  const loadUser = () => {
+    get({
+      url: currentUserEndpoint,
+    });
+  };
 
   useEffect(() => {
     setIsLoading(loading);
     if (!loading && success) {
       setUser(data);
+      if (!loading && !success) {
+        setIsAuthenticated(false);
+        setUser(null);
+      }
     }
   }, [loading, setIsLoading, setUser]);
+  const logout = () => {
+    post({
+      url: "/api/auth/logout",
+    });
+  };
 
   useEffect(() => {
-    get({
-      url: currentUserEndpoint,
-    });
+    loadUser();
   }, []);
   const values: AuthContextInterface = {
     isLoading,
     isAuthenticated,
     user,
+    logout,
+    loadUser,
   };
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };
+
+export const useUser = () => useContext(AuthContext);
