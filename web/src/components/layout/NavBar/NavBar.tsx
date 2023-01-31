@@ -128,6 +128,7 @@ const NonAuthUserLinks = () => {
   );
 };
 const AuthUserLinks = ({ logoutHandler }: { logoutHandler: () => void }) => {
+  const { user } = useUser();
   return (
     <>
       <Button
@@ -143,6 +144,9 @@ const AuthUserLinks = ({ logoutHandler }: { logoutHandler: () => void }) => {
           <span>profile</span>
         </Button>
       </Link>
+      <div>
+        <Typography>{user?.name}</Typography>
+      </div>
     </>
   );
 };
