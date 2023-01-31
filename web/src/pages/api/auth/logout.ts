@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import cookie from "cookie";
 
-const logout = (req: NextApiRequest, res: NextApiResponse) => {
+const logout = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "POST") {
     const refreshToken = req.cookies["refresh"];
+
     console.log(refreshToken);
     res.setHeader("Set-Cookie", [
       cookie.serialize("authorization", "", {

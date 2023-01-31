@@ -79,10 +79,12 @@ export function setTokens({
   res,
   refresh,
   access,
+  clear,
 }: {
   res: Response;
   refresh: string;
   access: string;
+  clear?: boolean;
 }) {
   const isProduction: boolean = process.env.MODE === "PRODUCTION";
   res.cookie("authorization", "Bearer " + access, {
@@ -91,7 +93,7 @@ export function setTokens({
     httpOnly: true,
     sameSite: isProduction ? "strict" : "lax",
     path: "/",
-    maxAge: accessMaxAge * 1000,
+    maxAge: clear ? 0 : accessMaxAge * 1000,
   });
   res.cookie("refresh", refresh, {
     secure: isProduction,
@@ -99,6 +101,6 @@ export function setTokens({
     httpOnly: true,
     sameSite: isProduction ? "strict" : "lax",
     path: "/",
-    maxAge: refreshMaxAge * 1000,
+    maxAge: clear ? 0 : refreshMaxAge * 1000,
   });
 }

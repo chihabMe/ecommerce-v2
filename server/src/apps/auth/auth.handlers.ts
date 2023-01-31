@@ -7,6 +7,7 @@ import { compareSync } from "bcrypt";
 import { prisma } from "../../core/database";
 import jwt from "jsonwebtoken";
 import { accessMaxAge, refreshMaxAge } from "../../core/constance";
+import status from "http-status";
 interface RegisterResponseErrors {
   fieldErrors: {
     name: string[];
@@ -46,12 +47,12 @@ export const loginHandler = async (
       access: accessToken,
       refresh: refreshToken,
     });
-    return res.status(200).json({
+    return res.status(status.OK).json({
       status: "success",
       // , accessToken, refreshToken
     });
   } catch (err) {
-    return res.status(403).json({
+    return res.status(status.BAD_REQUEST).json({
       status: "error",
       errors: "please check your email and password",
     });
@@ -69,7 +70,7 @@ export const registerHandler = async (
   const valid = registrationSchemas.safeParse(req.body);
   if (!valid.success)
     return res
-      .status(403)
+      .status(status.BAD_REQUEST)
       .json({ status: "error", errors: valid.error.formErrors });
   const { email, name, password, rePassword } = req.body;
   const errors: RegisterResponseErrors = {
@@ -91,11 +92,11 @@ export const registerHandler = async (
   if (usedEmail || usedName) {
     if (usedEmail) errors.fieldErrors.email.push("this email is been used");
     if (usedName) errors.fieldErrors.name.push("this name is been used");
-    return res.status(403).json({ status: "error", errors });
+    return res.status(status.BAD_REQUEST).json({ status: "error", errors });
   }
 
   return hash(password, 14, async (err, hash) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(status.BAD_REQUEST);
     try {
       const user = await prisma.user.create({
         data: {
@@ -104,9 +105,9 @@ export const registerHandler = async (
           password: hash,
         },
       });
-      return res.sendStatus(201);
+      return res.sendStatus(status.CREATED);
     } catch (err) {
-      return res.sendStatus(403);
+      return res.sendStatus(status.BAD_REQUEST);
     }
   });
 };
@@ -121,19 +122,21 @@ export const refreshTokenHandler = async (
   // const { token } = req.body;
 
   const token = req.cookies["refresh"] ?? req.headers["refresh"];
-  if (!token) return res.status(401).json("provide a refresh token");
+  if (!token)
+    return res.status(status.UNAUTHORIZED).json("provide a refresh token");
 
   const refreshToken = await authServices.verifyRefreshToken({
     token,
   });
 
   //if the refresh token is invalid or its not in the database return 401 error
-  if (!refreshToken) return res.status(401).json("invalid refresh token");
+  if (!refreshToken)
+    return res.status(status.UNAUTHORIZED).json("invalid refresh token");
   //@ts-ignore
   const id: string = jwt.decode(token).id;
   //get the user by the extracted  id
   const user = await authServices.getUserById({ id });
-  if (!user) return res.status(401).json("invalid user");
+  if (!user) return res.status(status.UNAUTHORIZED).json("invalid user");
   //delete the current refresh token
   await authServices.deleteRefreshToken({ token });
   //generate new refresh and access tokens
@@ -145,7 +148,7 @@ export const refreshTokenHandler = async (
     access: newAccessToken,
     refresh: newRefreshToken,
   });
-  return res.status(200).json({
+  return res.status(status.OK).json({
     status: "success",
     access: newAccessToken,
     refresh: newRefreshToken,
@@ -160,10 +163,28 @@ export const verifyAccessTokenHandler = async (
 
   const access =
     req.cookies["authorization"] ?? req.headers["authorization"]?.split(" ")[1];
-  if (!access) return res.status(401).json("provide an access tokens");
+  if (!access)
+    return res.status(status.UNAUTHORIZED).json("provide an access tokens");
 
   const isValid = authServices.verifyAccessToken({ token: access });
-  if (!isValid) return res.status(401).json("invalid access token");
+  if (!isValid)
+    return res.status(status.UNAUTHORIZED).json("invalid access token");
 
-  return res.sendStatus(200);
+  return res.sendStatus(status.OK);
+};
+
+export const logoutHandler = async (req: Request, res: Response) => {
+  const refresh = req.cookies["refresh"];
+  console.log(refresh);
+  await authServices.deleteRefreshToken({
+    token: refresh,
+  });
+  authServices.setTokens({
+    res,
+    access: "",
+    refresh: "",
+    clear: true,
+  });
+
+  return res.status(status.OK).json("logged out");
 };

@@ -1,4 +1,4 @@
-import { currentUserEndpoint } from "@/config/constances";
+import { currentUserEndpoint, logoutEndpoint } from "@/config/constances";
 import useFetch from "@/hooks/useFetch";
 import User from "@/interfaces/user.interface";
 import {
@@ -33,7 +33,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   );
   const [isLoading, setIsLoading] = useState(initialState.isLoading);
   const [user, setUser] = useState(initialState.user);
-  const { get, post, data, success, loading, status } = useFetch();
+  const { get, post, data, success, error, loading, status } = useFetch();
   const loadUser = () => {
     get({
       url: currentUserEndpoint,
@@ -51,19 +51,23 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!loading && data && success) {
       setUser(data);
+      setIsAuthenticated(true);
+      // setIsLoading(false);
     }
     if (!loading && !success) {
       setIsAuthenticated(false);
       setUser(null);
+      // setIsLoading(false);
     }
   }, [loading, success, setIsLoading, setUser]);
-  //stop loading after after the user is (fully loaded or not 'the user might be null the the user is not authenticated")
   useEffect(() => {
-    if (status != null) setIsLoading(false);
-  }, [user, isAuthenticated, setIsLoading]);
+    if (!user && error) setIsLoading(false);
+    if (user && success) setIsLoading(false);
+  }, [user, success, error, setIsLoading]);
+  //stop loading after after the user is (fully loaded or not 'the user might be null the the user is not authenticated")
   const logout = () => {
     post({
-      url: "/api/auth/logout",
+      url: logoutEndpoint,
     });
   };
 

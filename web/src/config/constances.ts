@@ -7,3 +7,4 @@ export const verifyEndpoint = API + "auth/token/verify";
 export const registrationEndpoint = API + "auth/register";
 
 export const currentUserEndpoint = API + "accounts/me";
+export const logoutEndpoint = API + "auth/token/logout";

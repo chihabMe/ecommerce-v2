@@ -5,11 +5,13 @@ import "../styles/globals.css";
 import { ThemeProvider } from "@material-tailwind/react";
 import { AuthContextProvider } from "@/context/auth.context";
 import AuthWrapper from "@/wrappers/AuthWrapper";
+import NextProgressBar from "nextjs-progressbar";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <ThemeProvider>
       <AuthContextProvider>
+        <NextProgressBar color="#2196F3" />
         <AuthWrapper>
           <NavBar />
           <Component {...pageProps} />;
