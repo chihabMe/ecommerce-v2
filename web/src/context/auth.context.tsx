@@ -33,31 +33,41 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   );
   const [isLoading, setIsLoading] = useState(initialState.isLoading);
   const [user, setUser] = useState(initialState.user);
-  const { get, post, data, success, loading } = useFetch();
+  const { get, post, data, success, loading, status } = useFetch();
   const loadUser = () => {
     get({
       url: currentUserEndpoint,
     });
   };
-
   useEffect(() => {
-    if (loading) setIsLoading(true);
-    if (!loading && success) {
-      setIsLoading(false);
+    console.log("is laoding ", isLoading);
+    if (!isLoading) {
+      console.log(isAuthenticated);
+      console.log(user);
+    }
+  }, [isLoading]);
+
+  //load the user and set isAuth.. to true if the request success or set it to null
+  useEffect(() => {
+    if (!loading && data && success) {
       setUser(data);
     }
     if (!loading && !success) {
       setIsAuthenticated(false);
       setUser(null);
-      setIsLoading(false);
     }
   }, [loading, success, setIsLoading, setUser]);
+  //stop loading after after the user is (fully loaded or not 'the user might be null the the user is not authenticated")
+  useEffect(() => {
+    if (status != null) setIsLoading(false);
+  }, [user, isAuthenticated, setIsLoading]);
   const logout = () => {
     post({
       url: "/api/auth/logout",
     });
   };
 
+  //load the user data after the context is mounted
   useEffect(() => {
     loadUser();
   }, []);

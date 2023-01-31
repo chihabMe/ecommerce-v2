@@ -6,8 +6,9 @@ const useFetch = () => {
   const [error, setError] = useState<any>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<null | number>(null);
 
-  const fetcher = async ({
+  const request = async ({
     method,
     url,
     body,
@@ -29,8 +30,8 @@ const useFetch = () => {
       //   body,
       //   mode: "cors",
       //   credentials: "include",
-      // });
-      const { ok, data } = await fetchWithRefresh({
+      // hidden});
+      const { ok, data, status } = await fetchWithRefresh({
         method,
         url,
         body,
@@ -42,29 +43,35 @@ const useFetch = () => {
       } else setSuccess(true);
 
       setData(data);
+      console.log("staus>>>", status);
+      if (status != 204) {
+        setLoading(false);
+      }
+      setStatus(status);
       return data;
     } catch (err) {
-    } finally {
-      setLoading(false);
       setError(true);
+      setLoading(false);
+      setStatus(null);
     }
   };
   const get = async ({ url, body }: { url: string; body?: string }) => {
-    return await fetcher({ method: "GET", url, body });
+    return await request({ method: "GET", url, body });
   };
   const post = async ({ url, body }: { url: string; body?: string }) => {
-    return await fetcher({ method: "POST", url, body });
+    return await request({ method: "POST", url, body });
   };
   const update = async ({ url, body }: { url: string; body?: string }) => {
-    return await fetcher({ method: "PUT", url, body });
+    return await request({ method: "PUT", url, body });
   };
   const remove = async ({ url, body }: { url: string; body?: string }) => {
-    return await fetcher({ method: "DELETE", url, body });
+    return await request({ method: "DELETE", url, body });
   };
   return {
     loading,
     data,
-    fetcher,
+    fetcher: request,
+    status,
     error,
     success,
     get,

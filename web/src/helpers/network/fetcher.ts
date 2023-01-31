@@ -22,6 +22,7 @@ export function fetcherConfig({
 
     credentials: "include",
     mode: "cors",
+
     body,
   };
 }

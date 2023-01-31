@@ -10,13 +10,11 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   const authHeader = req.cookies["authorization"];
-  console.log(req.cookies);
   const token = authHeader && authHeader.split(" ")[1];
   if (!token) return res.sendStatus(401);
   const isValid = verifyAccessToken({
     token,
   });
-  console.log("is valid", isValid);
   jwt.verify(
     token,
     process.env.ACCESS_SECRET ?? "",
