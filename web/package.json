@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fontsource/roboto": "^4.5.8",
+    "@heroicons/react": "^2.0.14",
     "@material-tailwind/react": "^1.2.5",
     "@next/font": "13.1.6",
     "@reduxjs/toolkit": "^1.9.1",

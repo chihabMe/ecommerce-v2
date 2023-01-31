@@ -1,4 +1,5 @@
 import { refreshEndpoint } from "@/config/constances";
+import axios from "axios";
 export function fetcherConfig({
   method,
   body,

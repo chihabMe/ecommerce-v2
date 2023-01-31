@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@fontsource/roboto': ^4.5.8
+  '@heroicons/react': ^2.0.14
   '@material-tailwind/react': ^1.2.5
   '@next/font': 13.1.6
   '@reduxjs/toolkit': ^1.9.1
@@ -30,6 +31,7 @@ specifiers:
 
 dependencies:
   '@fontsource/roboto': 4.5.8
+  '@heroicons/react': 2.0.14_react@18.2.0
   '@material-tailwind/react': 1.2.5_5ndqzdd6t4rivxsukjv3i3ak2q
   '@next/font': 13.1.6
   '@reduxjs/toolkit': 1.9.1_k4ae6lp43ej6mezo3ztvx6pykq
@@ -135,6 +137,14 @@ packages:
 
   /@fontsource/roboto/4.5.8:
     resolution: {integrity: sha512-CnD7zLItIzt86q4Sj3kZUiLcBk1dSk81qcqgMGaZe7SQ1P8hFNxhMl5AZthK1zrDM5m74VVhaOpuMGIL4gagaA==}
+    dev: false
+
+  /@heroicons/react/2.0.14_react@18.2.0:
+    resolution: {integrity: sha512-eFL4if6L7woL1fUvk/jjXx4z9NxVESHHrQnEd2qKVelTFTIr/3VLGWdPb0biia9ZVe26P0JSs/xmOlRNur3SrQ==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.11.8:

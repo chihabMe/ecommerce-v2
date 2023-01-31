@@ -10,6 +10,14 @@ module.exports = withMT({
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        "noto-sans": ["Noto Sans", "sans-serif"],
+      },
+      colors: {
+        primary: "#D5A64E",
+        "teal-color": "#73ADAA",
+      },
+    },
   },
 });
