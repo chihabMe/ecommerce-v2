@@ -41,6 +41,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    if (loading) setIsLoading(true);
     if (!loading && success) {
       setIsLoading(false);
       setUser(data);

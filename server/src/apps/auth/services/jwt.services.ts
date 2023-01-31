@@ -22,9 +22,13 @@ export async function verifyRefreshToken({
     process.env.REFRESH_SECRET ?? "",
     async (err, data) => {
       if (!err) {
-        console.log(data);
         //@ts-ignore
         const id: string = data.id;
+        const all = await prisma.refreshToken.findMany({
+          where: {
+            userId: id,
+          },
+        });
         const refreshToken = await prisma.refreshToken.findFirst({
           where: {
             userId: id,

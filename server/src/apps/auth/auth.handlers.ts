@@ -119,33 +119,32 @@ export const refreshTokenHandler = async (
   // if (!valid.success)
   // return res.status(403).json(valid.error.formErrors.fieldErrors);
   // const { token } = req.body;
-  const token = req.headers["refresh"] as string;
+
+  const token = req.cookies["refresh"] ?? req.headers["refresh"];
   if (!token) return res.status(401).json("provide a refresh token");
 
   const refreshToken = await authServices.verifyRefreshToken({
     token,
   });
 
-  //if the refresh token is invalid or its not in the database return 403 error
+  //if the refresh token is invalid or its not in the database return 401 error
   if (!refreshToken) return res.status(401).json("invalid refresh token");
-  console.log("tokens 2");
   //@ts-ignore
   const id: string = jwt.decode(token).id;
   //get the user by the extracted  id
   const user = await authServices.getUserById({ id });
   if (!user) return res.status(401).json("invalid user");
-  console.log("tokens 3");
   //delete the current refresh token
   await authServices.deleteRefreshToken({ token });
   //generate new refresh and access tokens
   const newAccessToken = authServices.generateAccessToken({ user });
   const newRefreshToken = await authServices.generateRefreshToken({ user });
   //return the refresh / access tokens
-  // authServices.setTokens({
-  //   res,
-  //   access: newAccessToken,
-  //   refresh: newRefreshToken,
-  // });
+  authServices.setTokens({
+    res,
+    access: newAccessToken,
+    refresh: newRefreshToken,
+  });
   return res.status(200).json({
     status: "success",
     access: newAccessToken,
@@ -158,8 +157,11 @@ export const verifyAccessTokenHandler = async (
   res: Response
 ) => {
   // const valid = tokenSchema.safeParse(req.body);
-  const access = req.headers["authorization"]?.split(" ")[1];
+
+  const access =
+    req.cookies["authorization"] ?? req.headers["authorization"]?.split(" ")[1];
   if (!access) return res.status(401).json("provide an access tokens");
+
   const isValid = authServices.verifyAccessToken({ token: access });
   if (!isValid) return res.status(401).json("invalid access token");
 

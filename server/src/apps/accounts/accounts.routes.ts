@@ -5,4 +5,4 @@ import { currentUserHandler } from "./accounts.handlers";
 export const accountsRouter = Router();
 accountsRouter.use(authMiddleware);
 
-accountsRouter.get("/me/", currentUserHandler);
+accountsRouter.get("/me", currentUserHandler);

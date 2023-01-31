@@ -16,9 +16,10 @@ export function fetcherConfig({
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: tokens?.access ? `Bearer ${tokens.access}` : "",
+      Authorization: tokens?.access ? `${tokens.access}` : "",
       refresh: tokens?.refresh ? `${tokens.refresh}` : "",
     },
+
     credentials: "include",
     mode: "cors",
     body,
@@ -63,8 +64,6 @@ export const fetcher = async ({
     body,
     tokens,
   });
-  console.log("body", body);
-  console.log("config", config);
   let refreshResponse;
   let data;
   let response;
@@ -88,7 +87,7 @@ export const fetcher = async ({
         method: "POST",
         body,
         tokens: {
-          access: refreshResponse.access,
+          access: "Bearer " + refreshResponse.access,
         },
       });
       response = await fetch(url, config);
