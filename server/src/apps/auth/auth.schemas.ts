@@ -7,7 +7,7 @@ export const registrationSchemas = z
     password: z.string().min(6, "please use more than 6 characters"),
     rePassword: z.string(),
   })
-  .refine((data) => data.password != data.rePassword, {
+  .refine((data) => data.password == data.rePassword, {
     message: "password don't match",
     path: ["rePassword"],
   });

@@ -43,7 +43,6 @@ const useFetch = () => {
       } else setSuccess(true);
 
       setData(data);
-      console.log("staus>>>", status);
       if (status != 204) {
         setLoading(false);
       }

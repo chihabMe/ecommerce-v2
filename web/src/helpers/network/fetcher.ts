@@ -95,11 +95,9 @@ export const fetcher = async ({
     }
   }
 
-  if (response.ok) {
-    try {
-      data = await response.json();
-    } catch {}
-  }
+  try {
+    data = await response.json();
+  } catch {}
 
   return {
     refreshResponse,

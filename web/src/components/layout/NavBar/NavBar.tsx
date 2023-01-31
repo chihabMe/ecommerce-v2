@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   IconButton,
@@ -8,6 +8,9 @@ import {
 } from "@material-tailwind/react";
 import Link from "next/link";
 import { useUser } from "@/context/auth.context";
+import useFetch from "@/hooks/useFetch";
+import { logoutEndpoint } from "@/config/constances";
+import { useRouter } from "next/router";
 
 const NavBar = () => {
   const [openNav, setOpenNav] = useState(false);
@@ -18,7 +21,22 @@ const NavBar = () => {
       () => window.innerWidth >= 960 && setOpenNav(false)
     );
   }, []);
-  const { isAuthenticated, user } = useUser();
+  const { isAuthenticated, user, logout } = useUser();
+  const router = useRouter();
+  const { post, loading, success } = useFetch();
+  const redirected = useRef(false);
+  const logoutHandler = async () => {
+    await post({
+      url: logoutEndpoint,
+    });
+    logout();
+  };
+  useEffect(() => {
+    if (!loading && success && !redirected.current) {
+      router.push("/");
+      redirected.current = true;
+    }
+  }, [loading, success, router]);
 
   const navList = (
     <ul className="mb-4 mt-2 flex  gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -80,7 +98,11 @@ const NavBar = () => {
         </Link>
         <div className=" lg:block">{navList}</div>
         <div className="flex space-x-2  ">
-          {user ? <AuthUserLinks /> : <NonAuthUserLinks />}
+          {user ? (
+            <AuthUserLinks logoutHandler={logoutHandler} />
+          ) : (
+            <NonAuthUserLinks />
+          )}
         </div>
       </div>
     </Navbar>
@@ -105,15 +127,14 @@ const NonAuthUserLinks = () => {
     </>
   );
 };
-const AuthUserLinks = () => {
-  const { logout } = useUser();
+const AuthUserLinks = ({ logoutHandler }: { logoutHandler: () => void }) => {
   return (
     <>
       <Button
         variant="filled"
         size="sm"
         className=" lg:inline-block !bg-red-400 !text-white"
-        onClick={logout}
+        onClick={logoutHandler}
       >
         <span>logout</span>
       </Button>

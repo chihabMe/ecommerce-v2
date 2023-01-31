@@ -1,16 +1,12 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { verifyEndpoint } from "./config/constances";
-import { fetcher, refreshFetcher } from "./helpers/network/fetcher";
+import { fetcher } from "./helpers/network/fetcher";
 
 export const middleware = async (req: NextRequest) => {
   const response = NextResponse.next();
   let access = req.cookies.get("authorization")?.value;
   let refresh = req.cookies.get("refresh")?.value;
-  console.log("middleware----");
-  console.log(access);
-  console.log(refresh);
-  console.log("middleware----");
 
   const { refreshResponse, status } = await fetcher({
     url: verifyEndpoint,
@@ -20,7 +16,6 @@ export const middleware = async (req: NextRequest) => {
       refresh,
     },
   });
-  console.log(status);
   if (status != 200)
     return NextResponse.redirect(new URL("/auth/login", req.url));
   if (

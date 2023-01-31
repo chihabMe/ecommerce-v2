@@ -33,7 +33,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   );
   const [isLoading, setIsLoading] = useState(initialState.isLoading);
   const [user, setUser] = useState(initialState.user);
-  const { get, post, data, success, error, loading, status } = useFetch();
+  const { get, data, success, error, loading, status } = useFetch();
   const loadUser = () => {
     get({
       url: currentUserEndpoint,
@@ -65,10 +65,9 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     if (user && success) setIsLoading(false);
   }, [user, success, error, setIsLoading]);
   //stop loading after after the user is (fully loaded or not 'the user might be null the the user is not authenticated")
-  const logout = () => {
-    post({
-      url: logoutEndpoint,
-    });
+  const logout = async () => {
+    setUser(null);
+    setIsAuthenticated(false);
   };
 
   //load the user data after the context is mounted

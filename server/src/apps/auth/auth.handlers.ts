@@ -10,8 +10,8 @@ import { accessMaxAge, refreshMaxAge } from "../../core/constance";
 import status from "http-status";
 interface RegisterResponseErrors {
   fieldErrors: {
-    name: string[];
-    email: string[];
+    name?: string[];
+    email?: string[];
   };
 }
 export const loginHandler = async (
@@ -71,13 +71,10 @@ export const registerHandler = async (
   if (!valid.success)
     return res
       .status(status.BAD_REQUEST)
-      .json({ status: "error", errors: valid.error.formErrors });
+      .json({ status: "error", errors: valid.error.formErrors.fieldErrors });
   const { email, name, password, rePassword } = req.body;
   const errors: RegisterResponseErrors = {
-    fieldErrors: {
-      email: [],
-      name: [],
-    },
+    fieldErrors: {},
   };
   const usedEmail = await prisma.user.findFirst({
     where: {
@@ -90,9 +87,11 @@ export const registerHandler = async (
     },
   });
   if (usedEmail || usedName) {
-    if (usedEmail) errors.fieldErrors.email.push("this email is been used");
-    if (usedName) errors.fieldErrors.name.push("this name is been used");
-    return res.status(status.BAD_REQUEST).json({ status: "error", errors });
+    if (usedEmail) errors.fieldErrors.email = ["this email is been used"];
+    if (usedName) errors.fieldErrors.name = ["this name is been used"];
+    return res
+      .status(status.BAD_REQUEST)
+      .json({ status: "error", errors: errors?.fieldErrors });
   }
 
   return hash(password, 14, async (err, hash) => {
@@ -175,7 +174,6 @@ export const verifyAccessTokenHandler = async (
 
 export const logoutHandler = async (req: Request, res: Response) => {
   const refresh = req.cookies["refresh"];
-  console.log(refresh);
   await authServices.deleteRefreshToken({
     token: refresh,
   });
