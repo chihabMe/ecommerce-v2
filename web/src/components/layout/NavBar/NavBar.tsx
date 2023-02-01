@@ -15,6 +15,7 @@ import { useUser } from "@/context/auth.context";
 import useFetch from "@/hooks/useFetch";
 import { logoutEndpoint } from "@/config/constances";
 import { useRouter } from "next/router";
+import NavMenu from "./navMenu/menuItems/NavMenu";
 
 const NavBar = () => {
   const [openNav, setOpenNav] = useState(false);
@@ -51,26 +52,8 @@ const NavBar = () => {
     { title: "accessories", href: "/", id: 6 },
   ];
 
-  const navList = (
-    <ul className="mb-4  mt-2 flex  gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      {links.map((link) => (
-        <Typography
-          key={link.id}
-          as="li"
-          variant="small"
-          color="blue-gray"
-          className="p-1 font-noto-sans font-bold uppercase text-sm text-black"
-        >
-          <Link href={link.href} className="flex items-center">
-            {link.title}
-          </Link>
-        </Typography>
-      ))}
-    </ul>
-  );
-
   return (
-    <Navbar className="mx-auto w-full max-w-screen-3xl  px-0 py-0  ">
+    <Navbar className="mx-auto w-full max-w-screen-3xl  px-0 py-0   border-b-2 border-orange-900 rounded-none ">
       <div className="bg-primary py-1.5 flex justify-center ">
         <span className="text-xs  text-black capitalize font-medium">
           free shipping to the USA
@@ -118,7 +101,7 @@ const NavBar = () => {
         </div>
       </div>
       <div className="container mx-auto flex items-center justify-center text-blue-gray-900 py-2">
-        <div className=" lg:block">{navList}</div>
+        <NavMenu />
 
         <div className="flex space-x-2  ">
           {/* {user ? (
