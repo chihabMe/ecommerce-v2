@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 import { hash } from "bcrypt";
-import { PrismaClient } from "@prisma/client";
 import { loginSchema, registrationSchemas, tokenSchema } from "./auth.schemas";
 import * as authServices from "./services";
+import * as authUtils from "./utils"
 import { compareSync } from "bcrypt";
 import { prisma } from "../../core/database";
 import jwt from "jsonwebtoken";
-import { accessMaxAge, refreshMaxAge } from "../../core/constance";
 import status from "http-status";
 interface RegisterResponseErrors {
   fieldErrors: {
@@ -39,10 +38,10 @@ export const loginHandler = async (
         status: "error",
         errors: "please check your email and password",
       });
-    const accessToken = authServices.generateAccessToken({ user });
-    const refreshToken = await authServices.generateRefreshToken({ user });
+    const accessToken = authUtils.generateAccessToken({ user });
+    const refreshToken = await authUtils.generateRefreshToken({ user });
 
-    authServices.setTokens({
+    authUtils.setTokens({
       res,
       access: accessToken,
       refresh: refreshToken,
@@ -124,7 +123,7 @@ export const refreshTokenHandler = async (
   if (!token)
     return res.status(status.UNAUTHORIZED).json("provide a refresh token");
 
-  const refreshToken = await authServices.verifyRefreshToken({
+  const refreshToken = await authUtils.verifyRefreshToken({
     token,
   });
 
@@ -137,12 +136,12 @@ export const refreshTokenHandler = async (
   const user = await authServices.getUserById({ id });
   if (!user) return res.status(status.UNAUTHORIZED).json("invalid user");
   //delete the current refresh token
-  await authServices.deleteRefreshToken({ token });
+  await authUtils.deleteRefreshToken({ token });
   //generate new refresh and access tokens
-  const newAccessToken = authServices.generateAccessToken({ user });
-  const newRefreshToken = await authServices.generateRefreshToken({ user });
+  const newAccessToken = authUtils.generateAccessToken({ user });
+  const newRefreshToken = await authUtils.generateRefreshToken({ user });
   //return the refresh / access tokens
-  authServices.setTokens({
+  authUtils.setTokens({
     res,
     access: newAccessToken,
     refresh: newRefreshToken,
@@ -165,7 +164,7 @@ export const verifyAccessTokenHandler = async (
   if (!access)
     return res.status(status.UNAUTHORIZED).json("provide an access tokens");
 
-  const isValid = authServices.verifyAccessToken({ token: access });
+  const isValid = authUtils.verifyAccessToken({ token: access });
   if (!isValid)
     return res.status(status.UNAUTHORIZED).json("invalid access token");
 
@@ -174,10 +173,10 @@ export const verifyAccessTokenHandler = async (
 
 export const logoutHandler = async (req: Request, res: Response) => {
   const refresh = req.cookies["refresh"];
-  await authServices.deleteRefreshToken({
+  await authUtils.deleteRefreshToken({
     token: refresh,
   });
-  authServices.setTokens({
+  authUtils.setTokens({
     res,
     access: "",
     refresh: "",
