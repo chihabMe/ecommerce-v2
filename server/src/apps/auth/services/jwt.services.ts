@@ -3,7 +3,6 @@ import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { accessMaxAge, refreshMaxAge } from "../../../core/constance";
 import { prisma } from "../../../core/database";
-import { todosRouter } from "../../todos/todos.routes";
 export function verifyAccessToken({ token }: { token: string }): boolean {
   let valid = false;
   jwt.verify(token, process.env.ACCESS_SECRET ?? "", async (err, data) => {
