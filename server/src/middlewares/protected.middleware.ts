@@ -1,9 +1,9 @@
 import { User } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { verifyAccessToken } from "../apps/auth/services";
 import { prisma } from "../core/database";
 import status from "http-status";
+import { verifyAccessToken } from "../apps/auth/utils";
 export const authMiddleware = (
   req: Request,
   res: Response,
