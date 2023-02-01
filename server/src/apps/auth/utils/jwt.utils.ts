@@ -103,3 +103,12 @@ export function setTokens({
     maxAge: clear ? 0 : refreshMaxAge * 1000,
   });
 }
+export const clearTokens = ({res}:{res:Response})=>{
+  setTokens({
+    res,
+    access: "",
+    refresh: "",
+    clear: true,
+  });
+
+}

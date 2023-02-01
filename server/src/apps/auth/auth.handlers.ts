@@ -176,12 +176,7 @@ export const logoutHandler = async (req: Request, res: Response) => {
   await authUtils.deleteRefreshToken({
     token: refresh,
   });
-  authUtils.setTokens({
-    res,
-    access: "",
-    refresh: "",
-    clear: true,
-  });
+  authUtils.clearTokens({res})
 
   return res.status(status.OK).json("logged out");
 };
