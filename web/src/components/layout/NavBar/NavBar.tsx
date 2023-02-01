@@ -70,23 +70,37 @@ const NavBar = () => {
   );
 
   return (
-    <Navbar className="mx-auto max-w-screen-2xl py-2 px-4 lg:px-8 lg:py-4">
-      <div className="flex items-center justify-between py-4">
-        <div className="flex items-center gap-6 text-gray-900  ">
-          <Typography as="h4" className="capitalize font-medium text-sm">
+    <Navbar className="mx-auto w-full max-w-screen-3xl  px-0 py-0  ">
+      <div className="bg-primary py-1.5 flex justify-center ">
+        <span className="text-xs  text-black capitalize font-medium">
+          free shipping to the USA
+        </span>
+      </div>
+      <div className="flex items-center w-full max-w-[1300px] mx-auto justify-between py-4 px-4">
+        <div className="flex items-center gap-4 md:gap-8 text-gray-900   ">
+          <Typography
+            as="h4"
+            className="capitalize text-sm cursor-pointer hover:text-primary transition-all duration-150 "
+          >
             blog
           </Typography>
-          <Typography as="h4" className="capitalize text-sm font-medium">
+          <Typography
+            as="h4"
+            className="capitalize text-sm cursor-pointer hover:text-primary transition-all duration-150 "
+          >
             our story
           </Typography>
-          <Typography as="h4" className="capitalize text-sm font-medium">
+          <Typography
+            as="h4"
+            className="capitalize text-sm cursor-pointer hover:text-primary transition-all duration-150 "
+          >
             contact
           </Typography>
         </div>
         <div>
           <Typography
             as="h1"
-            className="text-3xl  font-bold uppercase text-black font-noto-sans  "
+            className="text-2xl md:text-3xl  font-bold uppercase text-black font-noto-sans  md:mr-20   "
           >
             pro chef cook
           </Typography>
