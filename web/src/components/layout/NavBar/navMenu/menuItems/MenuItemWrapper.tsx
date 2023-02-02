@@ -14,17 +14,23 @@ const MenuItemWrapper = ({
       as="li"
       variant="small"
       color="blue-gray"
-      className="hover:cursor group relative p-1 font-noto-sans text-sm font-bold uppercase text-black hover:opacity-80"
+      className="hover:cursor group  px-px font-noto-sans text-sm font-bold uppercase text-black "
     >
       {/* <Link href={href} className="flex items-center"> */}
       {/* </Link> */}
-      <button className=" px-4 py-2 ">{title}</button>
+      <button className=" relative px-4 py-2     ">
+        <Typography className="font-tajawal text-[15px] font-bold  uppercase">
+          {title}
+        </Typography>
+      </button>
       <div
-        className="invisible absolute top-0 -left-1/2 z-50
-        min-w-[500px] translate-y-0  transform 
-        opacity-0 shadow-xl duration-300 ease-in-out group-hover:visible group-hover:translate-y-5 group-hover:transform  group-hover:opacity-100"
+        className="invisible   absolute top-6 left-0 right-0 z-50
+        min-h-screen min-w-[500px] translate-y-10   transform 
+         bg-white opacity-0 shadow-xl duration-150 ease-in-out group-hover:visible group-hover:transform group-hover:opacity-100  group-hover:duration-300"
       >
-        {children}
+        <div className="relative mx-auto  h-[400px] w-full max-w-screen-xl  p-6 pt-10  ">
+          {children}
+        </div>
       </div>
     </Typography>
   );

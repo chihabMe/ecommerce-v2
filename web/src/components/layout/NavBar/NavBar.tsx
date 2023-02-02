@@ -53,29 +53,29 @@ const NavBar = () => {
   ];
 
   return (
-    <Navbar className="mx-auto w-full max-w-screen-3xl  px-0 py-0   border-b-2 border-orange-900 rounded-none ">
-      <div className="bg-primary py-1.5 flex justify-center ">
-        <span className="text-xs  text-black capitalize font-medium">
+    <Navbar className="max-w-screen-3xl mx-auto w-full  rounded-none border-b-[3px]   border-orange-900 px-0 py-0 ">
+      <div className="flex justify-center bg-primary py-1.5 ">
+        <span className="text-xs  font-medium capitalize text-black">
           free shipping to the USA
         </span>
       </div>
-      <div className="flex items-center w-full max-w-[1300px] mx-auto justify-between py-4 px-4">
-        <div className="flex items-center gap-4 md:gap-8 text-gray-900   ">
+      <div className="mx-auto flex w-full max-w-[1300px] items-center justify-between py-4 px-4">
+        <div className="flex items-center gap-4 text-gray-900 md:gap-8   ">
           <Typography
             as="h4"
-            className="capitalize text-sm cursor-pointer hover:text-primary transition-all duration-150 "
+            className="cursor-pointer text-sm capitalize transition-all duration-150 hover:text-primary "
           >
             blog
           </Typography>
           <Typography
             as="h4"
-            className="capitalize text-sm cursor-pointer hover:text-primary transition-all duration-150 "
+            className="cursor-pointer text-sm capitalize transition-all duration-150 hover:text-primary "
           >
             our story
           </Typography>
           <Typography
             as="h4"
-            className="capitalize text-sm cursor-pointer hover:text-primary transition-all duration-150 "
+            className="cursor-pointer text-sm capitalize transition-all duration-150 hover:text-primary "
           >
             contact
           </Typography>
@@ -83,24 +83,24 @@ const NavBar = () => {
         <div>
           <Typography
             as="h1"
-            className="text-2xl md:text-3xl  font-bold uppercase text-black font-noto-sans  md:mr-20   "
+            className="font-noto-sans text-2xl  font-bold uppercase text-black md:mr-20  md:text-3xl   "
           >
             pro chef cook
           </Typography>
         </div>
         <div className="flex items-center gap-6">
           <div className="cursor-pointer">
-            <MagnifyingGlassIcon className="w-7 h-7 text-gray-900" />
+            <MagnifyingGlassIcon className="h-7 w-7 text-gray-900" />
           </div>
-          <div className="cursor-pointer relative">
-            <ShoppingBagIcon className="w-7 h-7 text-gray-900" />
-            <span className="flex h-5 w-5   rounded-full bg-teal-300 text-white absolute top-0 -right-1/3 font-bold text-[11px] text-center justify-center  items-center ">
+          <div className="relative cursor-pointer">
+            <ShoppingBagIcon className="h-7 w-7 text-gray-900" />
+            <span className="absolute top-0 -right-1/3   flex h-5 w-5 items-center justify-center rounded-full bg-teal-300 text-center text-[11px] font-bold  text-white ">
               4
             </span>
           </div>
         </div>
       </div>
-      <div className="container mx-auto flex items-center justify-center text-blue-gray-900 py-2">
+      <div className="container relative mx-auto flex items-center justify-center py-2 text-blue-gray-900">
         <NavMenu />
 
         <div className="flex space-x-2  ">
@@ -140,7 +140,7 @@ const AuthUserLinks = ({ logoutHandler }: { logoutHandler: () => void }) => {
       <Button
         variant="filled"
         size="sm"
-        className=" lg:inline-block !bg-red-400 !text-white"
+        className=" !bg-red-400 !text-white lg:inline-block"
         onClick={logoutHandler}
       >
         <span>logout</span>

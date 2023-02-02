@@ -1,11 +1,10 @@
+import { Typography } from "@material-tailwind/react";
 import React from "react";
 import MenuItemWrapper from "./MenuItemWrapper";
 const PotsAndPans = () => {
   return (
     <MenuItemWrapper title="pots and pans">
-      <div className="relative top-6 w-full bg-white p-6 ">
-        pots and pans body
-      </div>
+      <div className="relative  mx-auto h-[400px] w-full max-w-screen-xl bg-gray-500 p-6  "></div>
       ;
     </MenuItemWrapper>
   );

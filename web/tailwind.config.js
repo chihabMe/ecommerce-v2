@@ -13,6 +13,7 @@ module.exports = withMT({
     extend: {
       fontFamily: {
         "noto-sans": ["Noto Sans", "sans-serif"],
+        tajawal: ["Tajawal", "sans-serif"],
       },
       colors: {
         primary: "#D5A64E",

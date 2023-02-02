@@ -1,13 +1,20 @@
 import React from "react";
+import Knives from "./Knivers";
 import PotsAndPans from "./PotsAndPans";
 
 const NavMenu = () => {
   return (
-    <div className=" lg:block">
-      <ul className="mb-4  mt-2 flex  gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+    <nav className="">
+      <ul className=" mx-auto  flex   gap-0   ">
         <PotsAndPans />
+        <Knives />
+        <Knives />
+        <Knives />
+        <Knives />
+        <Knives />
+        <Knives />
       </ul>
-    </div>
+    </nav>
   );
 };
 
