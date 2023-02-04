@@ -1,22 +1,45 @@
 import { Typography } from "@material-tailwind/react";
 import Image from "next/image";
 import React from "react";
+import MegaCol from "./MegaCol";
+import MegaColItem from "./MegaColItem";
 import MenuItemWrapper from "./MenuItemWrapper";
+const materials = [
+  { title: "Copper", id: 4 },
+  { title: "Sets", id: 2 },
+  { title: "Carbon Steel", id: 3 },
+];
+const typesTitles = [
+  { title: "Frying Pans", id: 1 },
+  { title: "Sets", id: 2 },
+  { title: "Roasting", id: 3 },
+  { title: "Woks", id: 4 },
+  { title: "Dutch Ovens", id: 5 },
+  { title: "Stock Pots", id: 6 },
+  { title: "Saute and Sauce Pans", id: 7 },
+  { title: "Grill PanGrill Pans", id: 8 },
+];
+const brands = [
+  { title: "STAUB", id: 1 },
+  { title: "Great Jones", id: 2 },
+  { title: "Field Company", id: 3 },
+  { title: "All-Clad", id: 4 },
+  { title: "Misen", id: 5 },
+  { title: "SMEG", id: 6 },
+];
 const Knives = () => {
   return (
     <MenuItemWrapper title="knives">
       <div className=" grid  h-full w-full grid-cols-5  ">
         <div className="  flex flex-col gap-2">
           <h1 className=" pb-2.5 font-serif text-xl font-bold capitalize text-primary">
-            categories
+            Material
           </h1>
-          <ul className="flex flex-col font-noto-sans  text-sm font-bold   capitalize text-gray-900 ">
-            <li className="py-1.5 ">Stainless Steel</li>
-            <li className="py-1.5">Nonstick</li>
-            <li className="py-1.5">Carbon Steel</li>
-            <li className="py-1.5">Copper</li>
-            <li className="py-1.5">Cast Iron</li>
-          </ul>
+          <MegaCol>
+            {materials.map((item) => (
+              <MegaColItem key={item.id} children={item.title} />
+            ))}
+          </MegaCol>
         </div>
         <div className="  flex flex-col gap-2">
           <h1 className=" pb-2.5 font-serif text-xl font-bold capitalize text-primary">

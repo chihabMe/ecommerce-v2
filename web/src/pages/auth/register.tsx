@@ -63,14 +63,13 @@ const RegisterPage = () => {
   }, [loading, success]);
   return (
     <main>
-      <div className="w-full mx-auto max-w-sm pt-10 mt-10">
+      <div className="mx-auto mt-10 w-full max-w-sm pt-10">
         <Card className="w-full">
           <CardHeader
             variant="gradient"
-            color="blue"
-            className="!bg-primary grid h-24 mb-4 place-items-center"
+            className="mb-4 grid h-24 place-items-center !bg-primary text-white"
           >
-            <Typography className="text-2xl capitalize font-semibold">
+            <Typography className="text-2xl font-semibold capitalize">
               register
             </Typography>
           </CardHeader>
@@ -82,7 +81,7 @@ const RegisterPage = () => {
               initialValues={initialValues}
             >
               {(props) => (
-                <Form className="w-full flex flex-col gap-4">
+                <Form className="flex w-full flex-col gap-4">
                   <Input label="Username" name="name" type="text" />
                   <Input label="Email" name="email" type="email" />
                   <Input label="Password" name="password" type="password" />
@@ -94,20 +93,22 @@ const RegisterPage = () => {
 
                   <Button
                     type="submit"
-                    className="w-full uppercase flex justify-center items-center gap-4"
+                    className="flex w-full items-center justify-center gap-4 bg-primary uppercase"
                   >
                     <span>register</span>
                     {loading && <Spinner />}
                   </Button>
-                  <Typography className="font-medium text-sm text-center">
-                    do you have an account ?
+                  <div className="flex items-center justify-center gap-2">
+                    <Typography className="px-px text-center text-sm font-medium">
+                      do you have an account ?
+                    </Typography>
                     <Link
                       href="/auth/login"
-                      className="uppercase text-blue-500 font-bold"
+                      className="!text-xs font-bold uppercase text-primary"
                     >
                       login
                     </Link>
-                  </Typography>
+                  </div>
                 </Form>
               )}
             </Formik>

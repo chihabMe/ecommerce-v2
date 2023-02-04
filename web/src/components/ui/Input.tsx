@@ -13,10 +13,12 @@ const Input = ({
 }) => {
   const [field, meta, actions] = useField({ type, name });
   return (
-    <div className="flex px-1 flex-col gap-2">
+    <div className="flex flex-col gap-2 px-1">
       <MUInput
         size="lg"
         variant="standard"
+        className="  font-medium"
+        color="orange"
         success={meta.touched && !meta.error}
         error={meta.touched && meta.error != undefined}
         label={label}
@@ -24,7 +26,7 @@ const Input = ({
         {...field}
       />
       {meta.error && meta.touched && (
-        <span className="text-sm text-red-400 font-medium">{meta.error}</span>
+        <span className="text-sm font-medium text-red-400">{meta.error}</span>
       )}
     </div>
   );

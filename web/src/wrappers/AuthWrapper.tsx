@@ -13,8 +13,8 @@ const AuthWrapper = ({ children }: { children: ReactNode }) => {
   const { user, isLoading } = useUser();
   if (isLoading)
     return (
-      <div className="w-full h-72 flex justify-center items-center">
-        <Spinner color="blue" size={40} />
+      <div className="flex h-72 w-full items-center justify-center">
+        <Spinner size={40} />
       </div>
     );
 

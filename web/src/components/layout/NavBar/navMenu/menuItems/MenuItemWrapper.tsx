@@ -24,11 +24,11 @@ const MenuItemWrapper = ({
         </Typography>
       </button>
       <div
-        className="invisible   absolute top-6 left-0 right-0 z-50
-        min-h-screen min-w-[500px] translate-y-10   transform 
-         bg-white opacity-0 shadow-xl duration-150 ease-in-out group-hover:visible group-hover:transform group-hover:opacity-100  group-hover:duration-300"
+        className="invisible  absolute top-6  left-0 right-0 z-50 min-h-[450px] min-w-[500px] translate-y-14
+        transform   bg-white    
+         opacity-0 shadow-xl  transition-all duration-200 ease-in-out group-hover:visible group-hover:translate-y-8  group-hover:transform group-hover:opacity-100  group-hover:duration-500"
       >
-        <div className="relative mx-auto  h-[400px] w-full max-w-screen-xl  p-6 pt-10  ">
+        <div className="relative z-50 mx-auto  h-[400px] w-full    max-w-screen-2xl p-6 pt-10 ">
           {children}
         </div>
       </div>
