@@ -7,13 +7,19 @@ import { AuthContextProvider } from "@/context/auth.context";
 import AuthWrapper from "@/wrappers/AuthWrapper";
 import NextProgressBar from "nextjs-progressbar";
 import theme from "@material-tailwind/react/theme";
-const MyApp = ({ Component, pageProps }: AppProps) => {
+import { NextComponentType, NextPage, NextPageContext } from "next";
+type ComponentWithExtraAttrs = AppProps & {
+  Component: AppProps["Component"] & {
+    hideHeader: boolean | undefined;
+  };
+};
+const MyApp = ({ Component, pageProps }: ComponentWithExtraAttrs) => {
   return (
     <ThemeProvider>
       <AuthContextProvider>
         <NextProgressBar color="#D5A64E" />
         <AuthWrapper>
-          <NavBar />
+          {Component.hideHeader ? null : <NavBar />}
           <Component {...pageProps} />;
         </AuthWrapper>
       </AuthContextProvider>

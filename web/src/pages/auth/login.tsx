@@ -58,19 +58,19 @@ const LoginPage = () => {
   useEffect(() => {
     if (!loading && success) {
       loadUser();
-      router.push("/");
+      router.push("/admin");
     }
   }, [loading, success]);
   return (
-    <main>
-      <div className="mx-auto mt-10 w-full max-w-sm pt-10">
+    <main className="flex min-h-screen items-center justify-center  ">
+      <div className="mx-auto w-full  max-w-sm   ">
         <Card className="w-full">
           <CardHeader
             color="blue"
             className="mb-4 grid h-24 place-items-center  !bg-primary"
           >
             <Typography className="text-2xl font-semibold capitalize">
-              login
+              admin login
             </Typography>
           </CardHeader>
           <CardBody>
@@ -123,5 +123,5 @@ const LoginPage = () => {
     </main>
   );
 };
-
+LoginPage.hideHeader = true;
 export default LoginPage;
