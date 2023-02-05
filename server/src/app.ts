@@ -9,6 +9,7 @@ import { ALLOWED_ORIGINS } from "./core/constance";
 import { accountsRouter } from "./apps/accounts/accounts.routes";
 import cookieParser from "cookie-parser";
 import { _404, _500 } from "./middlewares/errors.middleware";
+import { PORT } from "./env";
 dotenv.config();
 const registerRoutes = (app: Router) => {
   app.use("/api/v1/auth", authRouter);
@@ -34,7 +35,7 @@ const main = () => {
   app.use(_500);
   //handle 404 errors
   //
-  const port = process.env.PORT ?? 3001;
+  const port =  PORT;
 
   app.listen(port, () => {
     console.log(`run on ${port}`);

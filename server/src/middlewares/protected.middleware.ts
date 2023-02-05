@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { prisma } from "../core/database";
 import status from "http-status";
 import { verifyAccessToken } from "../apps/auth/utils";
+import { getAccessSecret } from "../env";
 export const authMiddleware = (
   req: Request,
   res: Response,
@@ -19,7 +20,7 @@ export const authMiddleware = (
 
   jwt.verify(
     token,
-    process.env.ACCESS_SECRET ?? "",
+    getAccessSecret(),
     async (err: any, data: any) => {
       if (err) return res.status(status.UNAUTHORIZED).json("invalid token");
       const user = await prisma.user.findUnique({

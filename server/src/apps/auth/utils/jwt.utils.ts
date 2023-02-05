@@ -3,9 +3,10 @@ import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { accessMaxAge, refreshMaxAge } from "../../../core/constance";
 import { prisma } from "../../../core/database";
+import { DOMAIN, getAccessSecret, getRefreshSecret, isProduction } from "../../../env";
 export function verifyAccessToken({ token }: { token: string }): boolean {
   let valid = false;
-  jwt.verify(token, process.env.ACCESS_SECRET ?? "", async (err, data) => {
+  jwt.verify(token, getAccessSecret(), async (err, data) => {
     if (!err) valid = true;
   });
   return valid;
@@ -18,7 +19,7 @@ export async function verifyRefreshToken({
   let valid = false;
   await jwt.verify(
     token,
-    process.env.REFRESH_SECRET ?? "",
+    getRefreshSecret(),
     async (err, data) => {
       if (!err) {
         //@ts-ignore
@@ -46,7 +47,7 @@ export function generateAccessToken({ user }: { user: User }) {
     id: user.id,
     name: user.name,
   };
-  return jwt.sign(userData, process.env.ACCESS_SECRET ?? "", {
+  return jwt.sign(userData, getAccessSecret(), {
     expiresIn: accessMaxAge,
   });
 }
@@ -62,7 +63,7 @@ export async function generateRefreshToken({ user }: { user: User }) {
     id: user.id,
     name: user.name,
   };
-  const refreshToken = jwt.sign(userData, process.env.REFRESH_SECRET ?? "", {
+  const refreshToken = jwt.sign(userData, getRefreshSecret(), {
     expiresIn: refreshMaxAge,
   });
   await prisma.refreshToken.create({
@@ -85,20 +86,19 @@ export function setTokens({
   access: string;
   clear?: boolean;
 }) {
-  const isProduction: boolean = process.env.MODE === "PRODUCTION";
   res.cookie("authorization", "Bearer " + access, {
-    secure: isProduction,
+    secure: isProduction(),
     domain: process.env.DOMAIN,
     httpOnly: true,
-    sameSite: isProduction ? "strict" : "lax",
+    sameSite: isProduction() ? "strict" : "lax",
     path: "/",
     maxAge: clear ? 0 : accessMaxAge * 1000,
   });
   res.cookie("refresh", refresh, {
-    secure: isProduction,
-    domain: process.env.DOMAIN,
+    secure: isProduction(),
+    domain: DOMAIN,
     httpOnly: true,
-    sameSite: isProduction ? "strict" : "lax",
+    sameSite: isProduction() ? "strict" : "lax",
     path: "/",
     maxAge: clear ? 0 : refreshMaxAge * 1000,
   });
