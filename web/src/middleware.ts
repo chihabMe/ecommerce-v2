@@ -8,7 +8,7 @@ export const middleware = async (req: NextRequest) => {
   let access = req.cookies.get("authorization")?.value;
   let refresh = req.cookies.get("refresh")?.value;
 
-  const { refreshResponse, status } = await fetcher({
+  const { refreshResponse, data, status } = await fetcher({
     url: verifyEndpoint,
     method: "POST",
     tokens: {
@@ -16,6 +16,9 @@ export const middleware = async (req: NextRequest) => {
       refresh,
     },
   });
+  console.log(status);
+  console.log(data);
+  console.log(refreshResponse);
   if (status != 200)
     return NextResponse.redirect(new URL("/auth/login", req.url));
   if (

@@ -104,11 +104,6 @@ export function setTokens({
   });
 }
 export const clearTokens = ({res}:{res:Response})=>{
-  setTokens({
-    res,
-    access: "",
-    refresh: "",
-    clear: true,
-  });
-
+  res.clearCookie("authorization")
+  res.clearCookie("refresh")
 }

@@ -111,7 +111,7 @@ export const registerHandler = async (
 };
 
 export const refreshTokenHandler = async (
-  req: Request<{}, {}, { token: string }>,
+  req: Request< {},{}, { token: string }>,
   res: Response
 ) => {
   // const valid = tokenSchema.safeParse(req.body);

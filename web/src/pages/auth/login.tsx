@@ -62,7 +62,7 @@ const LoginPage = () => {
     }
   }, [loading, success]);
   return (
-    <main className="flex min-h-screen items-center justify-center  ">
+    <main className="flex min-h-screen items-center justify-center bg-yellow-50 ">
       <div className="mx-auto w-full  max-w-sm   ">
         <Card className="w-full">
           <CardHeader
@@ -105,7 +105,7 @@ const LoginPage = () => {
                   </Button>
                   <div className="flex items-center justify-center gap-2">
                     <Typography className="px-px text-center text-sm font-medium">
-                      don't have an account ?{" "}
+                      dont have an account ?{" "}
                     </Typography>
                     <Link
                       href="/auth/register"
